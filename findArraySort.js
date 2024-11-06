@@ -35,38 +35,44 @@
 // 1 <= nums[i] <= 28
 
 var canSortArray = function (nums) {
-  // Helper function to count the number of set bits in a number
-  function countSetBits(num) {
-    return num.toString(2).split("0").join("").length;
+  const countSetBits = (num) => num.toString(2).split("0").join("").length;
+
+  let numWithSetBits = nums.map((num) => ({ num, bits: countSetBits(num) }));
+
+  let sortedNums = [...numWithSetBits].sort((a, b) => a.num - b.num);
+
+  let i = 0;
+  while (i < numWithSetBits.length) {
+    if (numWithSetBits[i].num === sortedNums[i].num) {
+      i++;
+      continue;
+    }
+
+    let j = i;
+    while (
+      j < numWithSetBits.length &&
+      numWithSetBits[j].num !== sortedNums[i].num
+    ) {
+      j++;
+    }
+
+    for (let k = j; k > i; k--) {
+      if (numWithSetBits[k].bits !== numWithSetBits[k - 1].bits) {
+        return false;
+      }
+      [numWithSetBits[k], numWithSetBits[k - 1]] = [
+        numWithSetBits[k - 1],
+        numWithSetBits[k],
+      ];
+    }
+
+    i++;
   }
 
-  // Step 1: Group numbers by their set bits count
-  const groups = {};
-  for (const num of nums) {
-    const bits = countSetBits(num);
-    if (!groups[bits]) groups[bits] = [];
-    groups[bits].push(num);
-  }
-
-  // Step 2: Sort each group individually
-  for (const key in groups) {
-    groups[key].sort((a, b) => a - b);
-  }
-
-  // Step 3: Reconstruct the sorted array by set bits groups
-  const sortedBySetBits = [];
-  for (const num of nums) {
-    const bits = countSetBits(num);
-    sortedBySetBits.push(groups[bits].shift());
-  }
-
-  // Step 4: Check if the constructed sorted array matches the fully sorted array
-  const fullySorted = [...nums].sort((a, b) => a - b);
-  return sortedBySetBits.every((val, idx) => val === fullySorted[idx]);
+  return true;
 };
 
-// Test cases
 console.log(canSortArray([8, 4, 2, 30, 15])); // Output: true
 console.log(canSortArray([1, 2, 3, 4, 5])); // Output: true
 console.log(canSortArray([3, 16, 8, 4, 2])); // Output: false
-console.log(canSortArray([75, 34, 30])); // Output: false
+console.log(canSortArray([75, 34, 30]));
