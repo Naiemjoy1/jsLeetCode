@@ -27,17 +27,27 @@
 // 1 <= n, x <= 108
 
 var minEnd = function (n, x) {
+  if (n === 1) return x;
+
   let nums = [x];
+  let current = x;
 
   for (let i = 1; i < n; i++) {
-    let nextNum = nums[i - 1] + 1;
+    let nextNum = current + 1;
+
     while ((nextNum & x) !== x) {
       nextNum++;
     }
+
     nums.push(nextNum);
+    current = nextNum;
   }
+
   return nums[n - 1];
 };
 
 console.log(minEnd(3, 4));
 console.log(minEnd(2, 7));
+console.log(minEnd(6715154, 7193485));
+
+// time limit exceeded
