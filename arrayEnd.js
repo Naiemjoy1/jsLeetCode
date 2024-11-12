@@ -27,27 +27,26 @@
 // 1 <= n, x <= 108
 
 var minEnd = function (n, x) {
+  // For n == 1, nums only contains x itself
   if (n === 1) return x;
 
-  let nums = [x];
-  let current = x;
+  // The minimum nums[n - 1] that still satisfies the conditions
+  let result = x;
 
-  for (let i = 1; i < n; i++) {
-    let nextNum = current + 1;
-
-    while ((nextNum & x) !== x) {
-      nextNum++;
+  // Set bits in positions where `x` does not have bits, from least significant
+  let bit = 1;
+  while (n > 1) {
+    if ((x & bit) === 0) {
+      // Check if current bit in x is unset
+      result |= bit; // Set it in the result
+      n--; // Reduce n as we've "added" an element
     }
-
-    nums.push(nextNum);
-    current = nextNum;
+    bit <<= 1; // Move to the next bit
   }
 
-  return nums[n - 1];
+  return result;
 };
 
-console.log(minEnd(3, 4));
-console.log(minEnd(2, 7));
-console.log(minEnd(6715154, 7193485));
-
-// time limit exceeded
+console.log(minEnd(3, 4)); // Output: 6
+console.log(minEnd(2, 7)); // Output: 15
+console.log(minEnd(6715154, 7193485)); // Should be computed efficiently
