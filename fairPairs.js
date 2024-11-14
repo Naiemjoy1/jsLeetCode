@@ -23,30 +23,20 @@
 // -109 <= nums[i] <= 109
 // -109 <= lower <= upper <= 109
 
-/**
- * @param {number[]} nums
- * @param {number} lower
- * @param {number} upper
- * @return {number}
- */
 var countFairPairs = function (nums, lower, upper) {
-  nums.sort((a, b) => a - b); // Sort the array
+  nums.sort((a, b) => a - b);
   let count = 0;
 
   for (let i = 0; i < nums.length - 1; i++) {
     let left = i + 1;
 
-    // Find the first j such that nums[i] + nums[j] >= lower
     let lowBound = lowerBound(nums, left, nums.length - 1, lower - nums[i]);
 
-    // Find the last j such that nums[i] + nums[j] <= upper
     let upBound = upperBound(nums, left, nums.length - 1, upper - nums[i]);
 
-    // Calculate pairs within the bounds and update count
     let pairs = Math.max(0, upBound - lowBound + 1);
     count += pairs;
 
-    // Log details for each `i`
     console.log(`i: ${i}, nums[i]: ${nums[i]}`);
     console.log(
       `lower bound index (lowBound): ${lowBound}, upper bound index (upBound): ${upBound}`
@@ -59,7 +49,6 @@ var countFairPairs = function (nums, lower, upper) {
   return count;
 };
 
-// Helper function to find the first index where nums[i] + nums[j] >= lower
 function lowerBound(nums, left, right, target) {
   while (left <= right) {
     let mid = Math.floor((left + right) / 2);
@@ -69,7 +58,6 @@ function lowerBound(nums, left, right, target) {
   return left;
 }
 
-// Helper function to find the last index where nums[i] + nums[j] <= upper
 function upperBound(nums, left, right, target) {
   while (left <= right) {
     let mid = Math.floor((left + right) / 2);
@@ -79,7 +67,6 @@ function upperBound(nums, left, right, target) {
   return right;
 }
 
-// Example usage
 const nums = [0, 1, 7, 4, 4, 5];
 const lower = 3;
 const upper = 6;
