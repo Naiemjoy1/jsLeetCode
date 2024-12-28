@@ -38,7 +38,6 @@ var predictPartyVictory = function (senate) {
   const radiant = [];
   const dire = [];
 
-  // Initialize queues for each party with their respective positions
   for (let i = 0; i < senate.length; i++) {
     if (senate[i] === "R") {
       radiant.push(i);
@@ -47,12 +46,10 @@ var predictPartyVictory = function (senate) {
     }
   }
 
-  // Process bans in a round-robin fashion
   while (radiant.length > 0 && dire.length > 0) {
     const rIndex = radiant.shift();
     const dIndex = dire.shift();
 
-    // The senator with the lower index bans the other and gets back in the queue
     if (rIndex < dIndex) {
       radiant.push(rIndex + senate.length);
     } else {
@@ -60,10 +57,8 @@ var predictPartyVictory = function (senate) {
     }
   }
 
-  // Check which party still has senators remaining
   return radiant.length > 0 ? "Radiant" : "Dire";
 };
 
-// Example usage:
-console.log(predictPartyVictory("RD")); // Output: "Radiant"
-console.log(predictPartyVictory("RDD")); // Output: "Dire"
+console.log(predictPartyVictory("RD")); 
+console.log(predictPartyVictory("RDD")); 

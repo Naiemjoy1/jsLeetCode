@@ -37,26 +37,20 @@
 // 1 <= m <= n <= 105
 // 1 <= quantities[i] <= 105
 
-/**
- * @param {number} n
- * @param {number[]} quantities
- * @return {number}
- */
+
 var minimizedMaximum = function (n, quantities) {
   let left = 1;
   let right = Math.max(...quantities);
 
-  // Helper function to determine if a given maximum products per store (x) is feasible
   const canDistribute = (x) => {
     let requiredStores = 0;
     for (const quantity of quantities) {
       requiredStores += Math.ceil(quantity / x);
-      if (requiredStores > n) return false; // Exceeds available stores
+      if (requiredStores > n) return false; 
     }
     return requiredStores <= n;
   };
 
-  // Binary search to find the minimal feasible x
   while (left < right) {
     const mid = Math.floor((left + right) / 2);
     if (canDistribute(mid)) {
@@ -69,7 +63,6 @@ var minimizedMaximum = function (n, quantities) {
   return left;
 };
 
-// Example usage:
-console.log(minimizedMaximum(6, [11, 6])); // Output: 3
-console.log(minimizedMaximum(7, [15, 10, 10])); // Output: 5
-console.log(minimizedMaximum(1, [100000])); // Output: 100000
+console.log(minimizedMaximum(6, [11, 6])); 
+console.log(minimizedMaximum(7, [15, 10, 10])); 
+console.log(minimizedMaximum(1, [100000])); 
