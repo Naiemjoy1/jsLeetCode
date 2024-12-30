@@ -67,7 +67,6 @@ Trie.prototype.startsWith = function (prefix) {
   return true;
 };
 
-// Example usage:
 let trie = new Trie();
 trie.insert("apple");
 console.log(trie.search("apple")); // Output: true
