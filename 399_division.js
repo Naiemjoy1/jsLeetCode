@@ -84,6 +84,7 @@ var calcEquation = function(equations, values, queries) {
 
     return results;
 };
+
 console.log(calcEquation(
     [["a", "b"], ["b", "c"]],
     [2.0, 3.0],
