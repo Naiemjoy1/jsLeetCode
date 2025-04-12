@@ -43,64 +43,65 @@
 // 1 <= n <= 10
 // 1 <= k <= 9
 
+/**
+ * @param {number} n
+ * @param {number} k
+ * @return {number}
+ */
 var countGoodIntegers = function (n, k) {
-  const resultSet = new Set();
+  const fac = factorial(n);
+  let ans = 0;
+  const vis = new Set();
+  const base = Math.pow(10, Math.floor((n - 1) / 2));
 
-  const isPalindrome = (str) => {
-    let l = 0,
-      r = str.length - 1;
-    while (l < r) {
-      if (str[l++] !== str[r--]) return false;
-    }
-    return true;
-  };
-
-  const generatePermutations = (digits, path, used, callback) => {
-    if (path.length === digits.length) {
-      if (path[0] !== "0") callback(path.join(""));
-      return;
+  for (let i = base; i < base * 10; i++) {
+    let s = String(i);
+    const rev = reverseString(s);
+    if (n % 2 === 1) {
+      s += rev.substring(1);
+    } else {
+      s += rev;
     }
 
-    for (let i = 0; i < digits.length; i++) {
-      if (used[i] || (i > 0 && digits[i] === digits[i - 1] && !used[i - 1]))
-        continue;
-      used[i] = true;
-      path.push(digits[i]);
-      generatePermutations(digits, path, used, callback);
-      path.pop();
-      used[i] = false;
+    if (parseInt(s, 10) % k !== 0) {
+      continue;
     }
-  };
 
-  const start = Math.pow(10, n - 1);
-  const end = Math.pow(10, n) - 1;
+    const bs = Array.from(s).sort();
+    const t = bs.join("");
 
-  for (let num = start; num <= end; num++) {
-    const strNum = num.toString();
-    const digits = strNum.split("").sort();
+    if (vis.has(t)) {
+      continue;
+    }
 
-    const found = new Set();
+    vis.add(t);
 
-    generatePermutations(
-      digits,
-      [],
-      Array(digits.length).fill(false),
-      (perm) => {
-        if (found.has(perm)) return;
-        found.add(perm);
+    const cnt = Array(10).fill(0);
+    for (const c of t) {
+      cnt[parseInt(c, 10)]++;
+    }
 
-        if (isPalindrome(perm)) {
-          const val = parseInt(perm, 10);
-          if (val % k === 0) {
-            resultSet.add(num);
-          }
-        }
-      }
-    );
+    let res = (n - cnt[0]) * fac[n - 1];
+    for (const x of cnt) {
+      res /= fac[x];
+    }
+    ans += res;
   }
 
-  return resultSet.size;
+  return ans;
 };
+
+function factorial(n) {
+  const fac = Array(n + 1).fill(1);
+  for (let i = 1; i <= n; i++) {
+    fac[i] = fac[i - 1] * i;
+  }
+  return fac;
+}
+
+function reverseString(s) {
+  return s.split("").reverse().join("");
+}
 console.log(countGoodIntegers(3, 5)); // Output: 27
 console.log(countGoodIntegers(1, 4)); // Output: 2
 console.log(countGoodIntegers(5, 6)); // Output: 2468
